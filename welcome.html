@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to the File Server</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0f0f0; margin: 0; padding: 20px; }
+        h1 { color: #333; text-align: center; }
+        ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; }
+        li { margin: 10px; }
+        a { display: block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; }
+        a:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the File Server</h1>
+    <p style="text-align: center;">Please select a directory:</p>
+    <ul>
+        {{range $url, $urls := .}}
+            <li><a href="{{$url}}">{{$url}}</a></li>
+        {{end}}
+    </ul>
+</body>
+</html>

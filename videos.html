@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Videos</title>
+    <link rel="stylesheet" href="/style.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="container">
+        <div class="video-player-container">
+            <div class="video-placeholder">
+                <img src="/video-placeholder.png" alt="Video Placeholder">
+            </div>
+            <div class="video-player">
+                <video controls></video>
+            </div>
+        </div>
+
+        <div class="filter-container">
+            <select id="sort-by">
+                <option value="asc" selected>Sort A-Z</option>
+                <option value="desc">Sort Z-A</option>
+            </select>
+            <input type="text" id="search-input" placeholder="Search videos...">
+        </div>
+
+        <ul class="video-list">
+            {{range .}}
+            <li class="video-list-item" data-video-path="{{.Path}}" data-video-name="{{.Name}}">
+                <img src="/video-placeholder.png" alt="Video Thumbnail"> <span>{{.Name}}</span>
+            </li>
+            {{end}}
+        </ul>
+    </div>
+    <script src="/script.min.js"></script>
+</body>
+</html>
