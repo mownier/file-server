@@ -4,6 +4,7 @@ package main
 import (
 	"bufio"
 	"embed"
+	"encoding/json"
 	"file-server/models"
 	"fmt"
 	"html/template"
@@ -173,6 +174,19 @@ func videos(directories []string, addrs []net.Addr, port string, extensions []st
 		}
 		counter++
 	}
+
+	http.HandleFunc("/videourls", func(w http.ResponseWriter, r *http.Request) {
+		folders := []models.PublicVideoFolder{}
+		for dir, videos := range videoURLs {
+			publicVideos := []models.PublicVideo{}
+			for _, video := range videos {
+				publicVideos = append(publicVideos, models.PublicVideo{Name: video.Name, Path: video.Path})
+			}
+			folders = append(folders, models.PublicVideoFolder{Name: dir, Videos: publicVideos})
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(models.VideoURLListResponse{Folders: folders})
+	})
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/" {
