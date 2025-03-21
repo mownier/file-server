@@ -2,14 +2,14 @@
 <html>
 <head>
     <title>Videos</title>
-    <link rel="stylesheet" href="/style.min.css">
+    <link rel="stylesheet" href="/static/style.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div class="container">
         <div class="video-player-container">
             <div class="video-placeholder">
-                <img src="/video-placeholder.png" alt="Video Placeholder">
+                <img src="/static/video-placeholder.png" alt="Video Placeholder">
             </div>
             <div class="video-player">
                 <video controls></video>
@@ -27,11 +27,11 @@
         <ul class="video-list">
             {{range .}}
             <li class="video-list-item" data-video-path="{{.Path}}" data-video-name="{{.Name}}">
-                <img src="/video-placeholder.png" alt="Video Thumbnail"> <span>{{.Name}}</span>
+                <img src="/static/video-placeholder.png" alt="Video Thumbnail"> <span>{{.Name}}</span>
             </li>
             {{end}}
         </ul>
     </div>
-    <script src="/script.min.js"></script>
+    <script src="/static/script.min.js"></script>
 </body>
 </html>

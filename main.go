@@ -3,6 +3,7 @@ package main
 
 import (
 	"bufio"
+	"embed"
 	"file-server/models"
 	"fmt"
 	"html/template"
@@ -13,6 +14,9 @@ import (
 	"path/filepath"
 	"strings"
 )
+
+//go:embed templates/* static/*
+var content embed.FS
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
@@ -81,6 +85,8 @@ func main() {
 		}
 	}
 
+	http.Handle("/static/", http.FileServer(http.FS(content)))
+
 	addr := ":" + port
 	err = http.ListenAndServe(addr, nil)
 	if err != nil {
@@ -103,7 +109,7 @@ func all(directories []string, addrs []net.Addr, port string) {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/" {
-			tmpl := template.Must(template.ParseFiles("welcome.html"))
+			tmpl := template.Must(template.ParseFS(content, "templates/welcome.html"))
 			err := tmpl.Execute(w, folderURLs)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -168,13 +174,9 @@ func videos(directories []string, addrs []net.Addr, port string, extensions []st
 		counter++
 	}
 
-	http.Handle("/style.min.css", http.FileServer(http.Dir("./")))
-	http.Handle("/script.min.js", http.FileServer(http.Dir("./")))
-	http.Handle("/video-placeholder.png", http.FileServer(http.Dir("./")))
-
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/" {
-			tmpl := template.Must(template.ParseFiles("welcome.html"))
+			tmpl := template.Must(template.ParseFS(content, "templates/welcome.html"))
 			err := tmpl.Execute(w, videoURLs)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -184,7 +186,7 @@ func videos(directories []string, addrs []net.Addr, port string, extensions []st
 
 		for dirURL, urls := range videoURLs {
 			if r.URL.Path == dirURL {
-				tmpl := template.Must(template.ParseFiles("videos.html"))
+				tmpl := template.Must(template.ParseFS(content, "templates/videos.html"))
 				err := tmpl.Execute(w, urls)
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
